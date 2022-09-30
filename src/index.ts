@@ -1,4 +1,4 @@
-import type { Plugin, PluginOption } from 'vite';
+import type { Plugin, PluginOption, UserConfig } from 'vite';
 import vitePluginImp from 'vite-plugin-imp';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
@@ -8,12 +8,13 @@ export type Options = {
   lessVarsFile?: string;
   modifyVars?: Record<string, unknown>;
   libList?: LibItem[];
+  replaceMoment?: boolean;
 };
 
 const ROOT_DIR = process.cwd();
 
 export default function viteAntDesign(options: Options = {}): PluginOption {
-  const { modifyVars, lessVarsFile, libList = [] } = options;
+  const { modifyVars, lessVarsFile, libList = [], replaceMoment } = options;
 
   const lessPlugin: Plugin = {
     name: 'ant-design',
@@ -26,13 +27,21 @@ export default function viteAntDesign(options: Options = {}): PluginOption {
       }
       Object.assign(allModifyVars, modifyVars);
 
-      return {
+      const config: UserConfig = {
         css: {
           preprocessorOptions: {
             less: { javascriptEnabled: true, modifyVars: allModifyVars },
           },
         },
       };
+
+      if (replaceMoment) {
+        config.resolve = {
+          alias: { moment: 'dayjs' },
+        };
+      }
+
+      return config;
     },
   };
 
