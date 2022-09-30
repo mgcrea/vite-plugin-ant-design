@@ -6,7 +6,6 @@ import lessToJS from 'less-vars-to-js';
 
 export type Options = {
   lessVarsFile?: string;
-  lessPreprocessorOptions?: Record<string, unknown>;
   modifyVars?: Record<string, unknown>;
   libList?: LibItem[];
 };
@@ -14,11 +13,11 @@ export type Options = {
 const ROOT_DIR = process.cwd();
 
 export default function viteAntDesign(options: Options = {}): PluginOption {
-  const { modifyVars, lessVarsFile, lessPreprocessorOptions = {}, libList = [] } = options;
+  const { modifyVars, lessVarsFile, libList = [] } = options;
 
   const lessPlugin: Plugin = {
     name: 'ant-design',
-    async config(config) {
+    async config() {
       const allModifyVars = {};
 
       if (lessVarsFile) {
@@ -27,14 +26,11 @@ export default function viteAntDesign(options: Options = {}): PluginOption {
       }
       Object.assign(allModifyVars, modifyVars);
 
-      const { css = {} } = config;
-      const { preprocessorOptions = {} } = css;
-
-      config.css = {
-        ...css,
-        preprocessorOptions: {
-          ...preprocessorOptions,
-          less: { javascriptEnabled: true, modifyVars: allModifyVars, ...lessPreprocessorOptions },
+      return {
+        css: {
+          preprocessorOptions: {
+            less: { javascriptEnabled: true, modifyVars: allModifyVars },
+          },
         },
       };
     },
