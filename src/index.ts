@@ -28,8 +28,8 @@ export default function viteAntDesign(options: Options = {}): PluginOption {
 
       const { css = {}, plugins = [] } = config;
       config.css = {
-        preprocessorOptions: { javascriptEnabled: true, modifyVars: allModifyVars, ...preprocessorOptions },
         ...css,
+        preprocessorOptions: { less: { javascriptEnabled: true, modifyVars: allModifyVars, ...preprocessorOptions } },
       };
 
       plugins.push(
