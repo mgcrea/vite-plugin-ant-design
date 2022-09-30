@@ -6,16 +6,17 @@ import lessToJS from 'less-vars-to-js';
 
 export type Options = {
   lessVarsFile?: string;
+  lessPreprocessorOptions?: Record<string, unknown>;
   modifyVars?: Record<string, unknown>;
-  preprocessorOptions?: Record<string, unknown>;
   libList?: LibItem[];
 };
 
 const ROOT_DIR = process.cwd();
 
 export default function viteAntDesign(options: Options = {}): PluginOption {
-  const { modifyVars, lessVarsFile, preprocessorOptions = {}, libList = [] } = options;
-  const plugin: Plugin = {
+  const { modifyVars, lessVarsFile, lessPreprocessorOptions = {}, libList = [] } = options;
+
+  const lessPlugin: Plugin = {
     name: 'ant-design',
     async config(config) {
       const allModifyVars = {};
@@ -26,40 +27,44 @@ export default function viteAntDesign(options: Options = {}): PluginOption {
       }
       Object.assign(allModifyVars, modifyVars);
 
-      const { css = {}, plugins = [] } = config;
+      const { css = {} } = config;
+      const { preprocessorOptions = {} } = css;
+
       config.css = {
         ...css,
-        preprocessorOptions: { less: { javascriptEnabled: true, modifyVars: allModifyVars, ...preprocessorOptions } },
+        preprocessorOptions: {
+          ...preprocessorOptions,
+          less: { javascriptEnabled: true, modifyVars: allModifyVars, ...lessPreprocessorOptions },
+        },
       };
-
-      plugins.push(
-        vitePluginImp({
-          libList: [
-            ...libList,
-            {
-              libName: 'antd',
-              style: (name) => {
-                switch (name) {
-                  case 'col':
-                  case 'row':
-                    return 'antd/es/grid/style/index.less';
-                  case 'table':
-                    return [
-                      `antd/es/${name}/style/index.less`,
-                      'antd/es/pagination/style/index.less',
-                      'antd/es/dropdown/style/index.less',
-                    ];
-                  case 'popconfirm':
-                    return [`antd/es/${name}/style/index.less`, 'antd/es/popover/style/index.less'];
-                  default:
-                    return `antd/es/${name}/style/index.less`;
-                }
-              },
-            },
-          ],
-        })
-      );
     },
   };
-  return [plugin];
+
+  const importPlugin = vitePluginImp({
+    libList: [
+      ...libList,
+      {
+        libName: 'antd',
+        style: (name) => {
+          switch (name) {
+            case 'col':
+            case 'row':
+              return 'antd/es/grid/style/index.less';
+            case 'table':
+              return [
+                `antd/es/${name}/style/index.less`,
+                'antd/es/pagination/style/index.less',
+                'antd/es/dropdown/style/index.less',
+              ];
+            case 'popconfirm':
+              return [`antd/es/${name}/style/index.less`, 'antd/es/popover/style/index.less'];
+            default:
+              return `antd/es/${name}/style/index.less`;
+          }
+        },
+      },
+    ],
+  });
+
+  return [lessPlugin, importPlugin];
 }
