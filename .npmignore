@@ -4,11 +4,11 @@
 !LICENSE*
 !README*
 !CHANGELOG*
-!lib/**/*.js
-!lib/**/*.less
-!lib/**/*.css
-!lib/**/*.js.map
-!lib/**/*.d.ts
+!dist/**/*.js
+!dist/**/*.less
+!dist/**/*.css
+!dist/**/*.js.map
+!dist/**/*.d.ts
 !src/**/*.ts
 !src/**/*.tsx
 !src/**/*.less
