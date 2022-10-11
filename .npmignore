@@ -8,6 +8,8 @@
 !dist/**/*.less
 !dist/**/*.css
 !dist/**/*.js.map
+!dist/**/*.cjs
+!dist/**/*.mjs
 !dist/**/*.d.ts
 !src/**/*.ts
 !src/**/*.tsx
