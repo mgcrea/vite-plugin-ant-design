@@ -1,4 +1,4 @@
-interface LibItem {
+export interface LibItem {
   /**
    * library name
    */

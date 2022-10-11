@@ -3,6 +3,7 @@ import vitePluginImp from 'vite-plugin-imp';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import lessToJS from 'less-vars-to-js';
+import type { LibItem } from './modules/vite-plugin-imp';
 
 export type Options = {
   lessVarsFile?: string;
