@@ -1,6 +1,6 @@
 {
   "name": "@mgcrea/vite-plugin-ant-design",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Quick support for AntDesign in your Vite project",
   "repository": "github:mgcrea/vite-plugin-ant-design",
   "main": "./dist/index.cjs",
