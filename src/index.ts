@@ -51,23 +51,7 @@ export default function viteAntDesign(options: Options = {}): PluginOption {
       ...libList,
       {
         libName: 'antd',
-        style: (name) => {
-          switch (name) {
-            case 'col':
-            case 'row':
-              return 'antd/es/grid/style/index.less';
-            case 'table':
-              return [
-                `antd/es/${name}/style/index.less`,
-                'antd/es/pagination/style/index.less',
-                'antd/es/dropdown/style/index.less',
-              ];
-            case 'popconfirm':
-              return [`antd/es/${name}/style/index.less`, 'antd/es/popover/style/index.less'];
-            default:
-              return `antd/es/${name}/style/index.less`;
-          }
-        },
+        style: (name) => `antd/es/${name}/style`,
       },
     ],
   });
